@@ -5,5 +5,16 @@
   "python.linting.ruffEnabled": true,
   "pyright.inlayHints.variableTypes": false,
   "pyright.inlayHints.functionReturnTypes": false,
-  "Lua.diagnostics.globals": ["vim"]
+  "pyright.testing.provider": "pytest",
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+      "-S"
+  ],
+  "python.linting.enabled": true,
+  "python.linting.banditEnabled": true,
+  "python.linting.banditArgs": ["-c", "bandit.yaml"],
+  "python.linting.mypyEnabled": false,
+  "coc.preferences.jumpCommand": "edit",
+  "javascript.validate.enable": false,
+  "sql.database": "postgresql"
 }
