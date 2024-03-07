@@ -26,11 +26,6 @@ function init_nvim {
     maybe_create_link $SCRIPT_DIR/init.lua $nvim_config_dir/init.lua
     maybe_create_link $SCRIPT_DIR/coc-settings.json $nvim_config_dir/coc-settings.json
     maybe_create_link $SCRIPT_DIR/plugins.lua $nvim_config_dir/lua/plugins.lua
-    packer_dir=$nvim_data_dir/site/pack/packer/start/packer.nvim
-    if [[ ! -d $packer_dir ]]; then
-        packer_repo=https://github.com/wbthomason/packer.nvim
-        git clone --depth 1 $packer_repo $packer_dir
-    fi
 }
 
 function init_git {
@@ -50,7 +45,12 @@ function init_tmux {
     maybe_create_link $SCRIPT_DIR/tmux.conf.dotfile $HOME/.tmux.conf
 }
 
+function init_ideavim {
+	maybe_create_link $SCRIPT_DIR/.ideavimrc $HOME/.ideavimrc
+}
+
 init_git
 init_zsh
 init_nvim
 init_tmux
+init_ideavim
