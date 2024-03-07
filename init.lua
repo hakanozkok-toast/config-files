@@ -38,7 +38,7 @@ vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
 })
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
-  pattern = {'*.js', '*.html', '*.css', '*.ts', '*.yml', '*.yaml', '*.json', '*.lua'},
+  pattern = {'*.jsx?', '*.html', '*.css', '*.ts', '*.tsx*', '*.yml', '*.yaml', '*.json', '*.lua', '*.toml'},
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.softtabstop = 2
@@ -69,7 +69,7 @@ vim.o.textwidth = 0
 vim.o.wrapmargin = 0
 vim.o.backspace = 'indent,eol,start'
 vim.o.autoindent = true
-vim.o.exrc = true
+vim.opt.exrc = true
 vim.keymap.set('n', '<leader>b', ':ls<CR>:b<Space>', {remap = false})
 do
   local vimdir = vim.env.HOME .. '/.vim'
@@ -111,6 +111,10 @@ if(vim.fn.executable('clip.exe') ~= 0) then
 end
 
 _G.remote_docker_debug_cmd = function(command)
+  if vim.g.remote_docker_root == nil then
+    print('vim.g.remote_docker_root must be set')
+    return
+  end
   local container_name = command.args
   local dap = require('dap')
   local container_ls = ("docker container ls -qf 'name=%s'"):format(container_name)
@@ -138,7 +142,7 @@ _G.remote_docker_debug_cmd = function(command)
       pathMappings = {
         {
           localRoot = vim.fn.getcwd(),
-          remoteRoot = "/app",
+          remoteRoot = vim.g.remote_docker_root,
         }
       },
     }
