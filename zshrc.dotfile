@@ -101,7 +101,9 @@ setopt ignoreeof
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+	. "$NVM_DIR/nvm.sh"  # This loads nvm
+fi
 eval "$(pyenv init -)"
 
 # kubectl plugin manager
@@ -111,6 +113,13 @@ alias kubens='kubectl ns'
 alias activate='source .venv/bin/activate'
 
 # Access custom aliases in the shell
-[ -e "${HOME}/.zsh_aliases" ] && source "${HOME}/.zsh_aliases"
+if [[ -e "${HOME}/.zsh_aliases" ]]; then
+	source "${HOME}/.zsh_aliases"
+fi
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [[ -f ~/.fzf.zsh ]]; then
+	source ~/.fzf.zsh
+fi
+source /Users/hakan.ozkok/.dotfiles/bashrc
+
+eval "$(rbenv init - zsh)"
