@@ -40,6 +40,7 @@ return {
     },
     keys = '<leader>x',
     build = 'python -m venv ~/.debugpy && ~/.debugpy/bin/python -m pip install debugpy',
+    lazy = false,
     config = function()
       local dap = require('dap')
       local dappy = require('dap-python')
@@ -167,7 +168,9 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
-      require('nvim-tree').setup()
+      require('nvim-tree').setup({
+        view = { adaptive_size = true },
+      })
       vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
     end,
     keys = '<C-n>',
