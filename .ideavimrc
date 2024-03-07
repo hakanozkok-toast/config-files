@@ -1,0 +1,222 @@
+" setting <leader> key to comma
+let mapleader = ","
+
+" for Gdiff vertical open
+set diffopt+=vertical
+
+" disable mouse
+"set mouse=
+
+" autocmd Filetype javascript,typescript,json,yaml,html setlocal ts=2 sts=2 sw=2 expandtab
+
+" language specific indentation and character rules
+"au BufNewFile,BufRead *.js,*.html,*.css,*.ts,*.yml,*.yaml,*.json
+"    \ set tabstop=2 |
+"    \ set softtabstop=2 |
+"    \ set shiftwidth=2 |
+"    \ set expandtab
+
+"au BufNewFile,BufRead *.py
+"    \ set tabstop=4 |
+"    \ set softtabstop=4 |
+"    \ set shiftwidth=4 |
+"    \ set expandtab |
+"    \ set smarttab
+
+"au BufNewFile,BufRead *.lua
+"    \ set tabstop=2 |
+"    \ set softtabstop=2 |
+"    \ set shiftwidth=2 |
+"    \ set expandtab |
+"    \ set smarttab
+
+" show current line absolute number
+" show relative line numbers on bot and top
+set relativenumber
+set number
+
+set updatetime=500
+
+" cause vim to move the cursor to the previous matching bracket for half a
+" second.
+set showmatch
+
+" always display the statusline
+set laststatus=2
+
+" Make search case insensitive
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" tab configuration
+"set tabstop=4
+"set shiftwidth=4
+"set softtabstop=4
+"set smarttab
+"set expandtab
+
+" word wrap
+set wrap
+set linebreak
+set nolist
+set textwidth=0
+set wrapmargin=0
+
+set backspace=indent,eol,start
+
+" indentation
+set autoindent
+
+" easier buffer switching
+nnoremap <Leader>b :ls<CR>:b<Space>
+
+" Disable stupid backup and swap files - they trigger too many events
+" for file system watchers
+" set nobackup
+" set nowritebackup
+" set noswapfile
+
+" set swap and backup directories, double slash prevents name collisions
+"silent !mkdir -p ~/.vim/backup ~/.vim/swap ~/.vim/undo
+"set backupdir=~/.vim/backup//
+"set directory=~/.vim/swap//
+"set undodir=~/.vim/undo//
+
+" show invisible tab indicator characters
+" set listchars=tab:▸\ ,
+" nmap <leader>l :set list!<CR>
+
+" navigate between wrapped lines
+" nmap <silent> k gk
+" imap <silent> <C-o>k <C-o>gk
+" nmap <silent> j gj
+" imap <silent> <C-o>j <C-o>gj
+" nmap <silent> ^ g<Home>
+" imap <silent> <C-o>^ <C-o>g<Home>
+" nmap <silent> $ g<End>
+" imap <silent> <C-o>$ <C-o>g<End>
+
+" easier moving of code blocks
+" Try to go into visual mode (v), thenselect several lines of code here and
+" then press ``>`` several times.
+
+" better indentation
+vnoremap < <gv
+vnoremap > >gv
+
+" to easily move though windows
+nmap <C-j> <c-w>j
+nmap <C-k> <c-w>k
+nmap <C-l> <c-w>l
+nmap <C-h> <c-w>h
+
+" gundo plugin shortcut
+"map <leader>G :GundoToggle<CR>
+
+" NERDTree plugin shortcut
+"map <C-n> :NERDTreeToggle<CR>
+" NvimTree toggle shortcut
+"map <C-n> :NvimTreeToggle<CR>
+
+" disable checks for python; there is no plugin dependency using python
+" this is mostly required for legacy vim plugins that depend on python
+" most plugins nowadays use lua instead.
+"let g:loaded_python3_provider = 0
+
+" vimwiki file format and path configuration
+"let g:vimwiki_list = [{'path': '~/vimwiki/',
+"                      \'syntax': 'markdown', 'ext': '.md'}]
+"let g:vimwiki_global_ext = 0
+" let g:vimwiki_ext2syntax = {'.md': 'markdown'}
+
+
+syntax on " syntax highlighting
+filetype on " try to detect filetypes
+
+" use python instead of python3 for tern support
+" if(has("python"))
+"     " enable tern shortcuts
+"     let g:tern_map_keys=1
+"     map <leader>td :TernDoc<CR>
+"     map <leader>tb :TernDocBrowse<CR>
+"     map <leader>tt :TernType<CR>
+"     map <leader>tD :TernDef<CR>
+"     map <leader>tpd :TernDefPreview<CR>
+"     map <leader>tsd :TernDefSplit<CR>
+"     map <leader>ttd :TernDefTab<CR>
+"     map <leader>tr :TernRefs<CR>
+"     map <leader>tR :TernRename<CR>
+" endif
+
+"if (has("python3"))
+"    let g:jedi#force_py_version = 3
+"endif
+"if (has('nvim'))
+"    let g:python3_host_prog = $HOME . '/.pyenv/shims/python3'
+"endif
+
+"syntax enable
+"set t_Co=256
+"let g:solarized_termcolors=256
+"let g:solarized_termtrans=1
+"let g:solarized_underline=0
+"set background=dark
+"if has('termguicolors')
+"  set termguicolors
+"endif
+"let g:gruvbox_material_background='hard'
+"let g:gruvbox_material_better_performance=1
+"let g:airline_theme='gruvbox_material'
+"colorscheme gruvbox-material
+
+"set cc=80
+
+filetype plugin indent on " enable loading indent file for filetype
+
+
+
+
+" tell syntastic to use native python checker
+" let g:syntastic_python_checkers = ['python', 'mypy']
+"let g:neomake_python_enabled_makers = ['python']
+"call neomake#configure#automake('nrwi', 500)
+
+" python-mode configuration
+" let g:pymode=0
+" let g:pymode_indent=0
+" let g:pymode_motion=0
+" let g:pymode_doc=0
+" let g:pymode_breakpoint=1
+" let g:pymode_lint=0
+" let g:pymode_rope=0
+" let g:pymode_syntax=0
+" let g:pymode_virtualenv=1 " Auto fix vim python paths if virtualenv enabled
+" let g:pymode_folding=1  " Enable python folding
+" let g:pymode_utils_whitespaces=0  " Do not autoremove unused whitespaces
+
+" ignore pep257 missing docstring warning
+" let g:pymode_lint_ignore = "C0110 Exported"
+
+" let g:pymode_lint_minheight = 5   " Minimal height of pylint error window
+" let g:pymode_lint_maxheight = 15  " Maximal height of pylint error window
+" let g:pymode_lint_write = 0  " Disable pylint checking every save
+" let g:pymode_run_key = "<leader>run"  " default key conflicts with jedi-vim
+" let g:pymode_syntax_highlight_self=0  " do not highlight self
+" let g:pymode_rope_vim_completion=0  " use jedi-vim for completion
+" let g:pymode_rope_guess_project=0
+" let g:pymode_doc_key="<leader>k"  " used jedi-vim for help
+" let g:pymode_run_bind = '<leader>R'
+
+" syntastic rules
+nmap <leader>d :action GotoImplementation<CR>
+nremap <C-[> <ESC>
+nmap <leader>rn :action RenameElement<CR>
+nmap <leader>xb :action ToggleLineBreakpoint<CR>
+nmap <leader>xn :action StepOver<CR>
+nmap <leader>xs :action StepInto<CR>
+nmap <leader>xr :action StepOut<CR>
+nmap <leader>c<space> :action CommentByLineComment<CR>
+nmap <leader>gr :action ShowUsages<CR>
+set commentary
