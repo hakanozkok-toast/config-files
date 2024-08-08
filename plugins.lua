@@ -61,62 +61,64 @@ return {
           enabled = false,
         },
       })
-      wk.register({
-        ["<leader>x"] = {
-          "debugger options",
-          c = {dap.continue, "continue/run debug"},
-          n = {dap.step_over, "step over line"},
-          s = {dap.step_into, "step into line"},
-          r = {dap.step_out, "return/step out function"},
-          u = {dap.up, "go up in stack trace"},
-          d = {dap.down, "go down in stack trace"},
-          b = {dap.toggle_breakpoint, "toggle breakpoint"},
-          l = {dap.run_to_cursor, "run until the cursor"},
-          h = {widgets.hover, "show object", mode = {"n", "v"}},
-          p = {widgets.preview, "show preview", mode = {"n", "v"}},
-          i = {"open repl"},
-          f = {"show stack options"},
-          ii = {dap.repl.open, "really open repl?"},
-          ff = {
-            function()
-              widgets.centered_float(widgets.frames)
-            end,
-            "show stack frames"
-          },
-          fs = {
-            function()
-              widgets.centered_float(widgets.scopes)
-            end,
-            "show stack scopes"
-          },
-          t = {
-            "neotest commands",
-            t = {
-              function()
-                neotest.run.run()
-              end,
-              "run neotest"
-            },
-            d = {
-              function()
-                neotest.run.run({strategy='dap'})
-              end,
-              "run neotest in debug mode"
-            },
-            o = {
-              function()
-                neotest.output_panel.toggle()
-              end,
-              "toggle neotest output panel"
-            },
-            s = {
-              function()
-                neotest.summary.toggle()
-              end,
-              "toggle neotest summary panel"
-            },
-          },
-        }
+      wk.add({
+        {"<leader>x", desc = "debugger options" },
+        {"<leader>xc", dap.continue, desc = "continue/run debug"},
+        {"<leader>xn", dap.step_over, desc = "step over line"},
+        {"<leader>xs", dap.step_into, desc = "step into line"},
+        {"<leader>xr", dap.step_out, desc = "return/step out function"},
+        {"<leader>xu", dap.up, desc = "go up in stack trace"},
+        {"<leader>xd", dap.down, desc = "go down in stack trace"},
+        {"<leader>xb", dap.toggle_breakpoint, desc = "toggle breakpoint"},
+        {"<leader>xl", dap.run_to_cursor, desc = "run until the cursor"},
+        {"<leader>xh", widgets.hover, desc = "show object", mode = {"n", "v"}},
+        {"<leader>xp", widgets.preview, desc = "show preview", mode = {"n", "v"}},
+        {"<leader>xi", desc = "open repl"},
+        {"<leader>xf", desc = "show stack options"},
+        {"<leader>xii", dap.repl.open, desc = "really open repl?"},
+        {
+          "<leader>xff",
+          function()
+            widgets.centered_float(widgets.frames)
+          end,
+          desc = "show stack frames"
+        },
+        {
+          "<leader>xfs",
+          function()
+            widgets.centered_float(widgets.scopes)
+          end,
+          desc = "show stack scopes"
+        },
+        {"<leader>xt" , desc = "neotest commands"},
+        {
+          "<leader>xtt",
+          function()
+            neotest.run.run()
+          end,
+          desc = "run neotest"
+        },
+        {
+          "<leader>xtd" ,
+          function()
+            neotest.run.run({strategy='dap'})
+          end,
+          desc = "run neotest in debug mode"
+        },
+        {
+          "<leader>xto" ,
+          function()
+            neotest.output_panel.toggle()
+          end,
+          desc = "toggle neotest output panel"
+        },
+        {
+          "<leader>xts" ,
+          function()
+            neotest.summary.toggle()
+          end,
+          desc = "toggle neotest summary panel"
+        },
       })
       vim.api.nvim_create_user_command(
         'DapClearBreakpoints', dap.clear_breakpoints, {nargs=0}
@@ -143,7 +145,7 @@ return {
   {
     'nvim-telescope/telescope.nvim',
     dependencies = { {'nvim-lua/plenary.nvim'} },
-    version = '0.1.1',
+    version = '0.1.8',
   },
 
   -- universal vim settings
