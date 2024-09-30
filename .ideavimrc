@@ -210,7 +210,8 @@ filetype plugin indent on " enable loading indent file for filetype
 " let g:pymode_run_bind = '<leader>R'
 
 " syntastic rules
-nmap <leader>d :action GotoImplementation<CR>
+nmap <leader>d :action GotoDeclaration<CR>
+nmap <leader>gi :action GotoImplementation<CR>
 nremap <C-[> <ESC>
 nmap <leader>rn :action RenameElement<CR>
 nmap <leader>xb :action ToggleLineBreakpoint<CR>
