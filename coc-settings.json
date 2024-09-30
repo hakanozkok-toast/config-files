@@ -16,5 +16,6 @@
   "python.linting.mypyEnabled": false,
   "coc.preferences.jumpCommand": "edit",
   "javascript.validate.enable": false,
-  "sql.database": "postgresql"
+  "sql.database": "postgresql",
+  "inlayHint.enable": false
 }
