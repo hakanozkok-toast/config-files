@@ -171,8 +171,14 @@ return {
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
+      local api = require('nvim-tree.api')
+      local function on_attach(bufnr)
+        api.config.mappings.default_on_attach(bufnr)
+        vim.keymap.del('n', '<C-e>', { buffer = bufnr })
+      end
       require('nvim-tree').setup({
         view = { adaptive_size = true },
+        on_attach = on_attach,
       })
       vim.keymap.set('n', '<C-n>', ':NvimTreeToggle<CR>')
     end,
@@ -363,13 +369,13 @@ return {
       vim.g.mkdp_refresh_slow = 1
     end
   },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    opts = {
-      scope = { enabled = false },
-    },
-  },
+  --{
+  --  "lukas-reineke/indent-blankline.nvim",
+  --  main = "ibl",
+  --  opts = {
+  --    scope = { enabled = false },
+  --  },
+  --},
   { -- fold method
     "kevinhwang91/nvim-ufo",
     dependencies = {
@@ -383,5 +389,11 @@ return {
         end
       })
     end
+  },
+  {
+      "nvim-neorg/neorg",
+      lazy = false,
+      version = "*",
+      config = true,
   },
 }
