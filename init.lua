@@ -38,7 +38,7 @@ vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
 })
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
-  pattern = {'*.jsx?', '*.html', '*.css', '*.ts', '*.tsx*', '*.yml', '*.yaml', '*.json', '*.lua', '*.toml'},
+  pattern = {'*.jsx?', '*.html', '*.css', '*.ts', '*.tsx*', '*.yml', '*.yaml', '*.json', '*.lua', '*.toml', '*.tf'},
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.softtabstop = 2
@@ -117,18 +117,19 @@ _G.remote_docker_debug_cmd = function(command)
   end
   local container_name = command.args
   local dap = require('dap')
-  local container_ls = ("docker container ls -qf 'name=%s'"):format(container_name)
+  --local container_ls = ("docker container ls -qf 'name=%s'"):format(container_name)
   local function exec(cmd)
     return (io.popen(cmd, "r")):read("l")
   end
-  local container_id = exec(container_ls)
-  if container_id == nil then
-    print("cannot access the container, make sure it is running")
-    return
-  end
-  local container_ip = exec(
-    ("docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' %s"):format(container_id)
-  )
+  --local container_id = exec(container_ls)
+  --if container_id == nil then
+  --  print("cannot access the container, make sure it is running")
+  --  return
+  --end
+  --local container_ip = exec(
+  --  ("docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' %s"):format(container_id)
+  --)
+  local container_ip = '127.0.0.1'
   dap.run(
     {
       type = "python",
