@@ -11,6 +11,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+vim.opt.fileformats = "unix,dos,mac"
+
 vim.g.mapleader = ','
 -- disable checks for python; there is no plugin dependency using python
 -- this is mostly required for legacy vim plugins that depend on python
@@ -27,7 +29,7 @@ vim.opt.diffopt = vim.opt.diffopt + 'vertical'
 vim.o.mouse = ''
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
-  pattern = '*.py',
+  pattern = {'*.py', "*.graphql"},
   callback = function()
     vim.bo.tabstop = 4
     vim.bo.softtabstop = 4

@@ -391,9 +391,10 @@ return {
     end
   },
   {
-      "nvim-neorg/neorg",
-      lazy = false,
-      version = "*",
-      config = true,
+    "nvim-neorg/neorg",
+    lazy = true,
+    version = "*",
+    config = true,
+    cmd = "Neorg",
   },
 }
