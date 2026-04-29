@@ -21,6 +21,10 @@ vim.g.loaded_python3_provider = 0
 
 require('lazy').setup('plugins', {
   defaults = { lazy = false },
+  change_detection = {
+    enabled = false,
+    notify = false,
+  },
 })
 
 vim.o.foldmethod = 'indent'
@@ -29,7 +33,7 @@ vim.opt.diffopt = vim.opt.diffopt + 'vertical'
 vim.o.mouse = ''
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
-  pattern = {'*.py', "*.graphql"},
+  pattern = {'*.py', "*.graphql", "*.kt"},
   callback = function()
     vim.bo.tabstop = 4
     vim.bo.softtabstop = 4
@@ -40,7 +44,7 @@ vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
 })
 
 vim.api.nvim_create_autocmd({'BufNewFile', 'BufRead'}, {
-  pattern = {'*.jsx?', '*.html', '*.css', '*.ts', '*.tsx*', '*.yml', '*.yaml', '*.json', '*.lua', '*.toml', '*.tf'},
+  pattern = {'*.jsx?', '*.html', '*.css', '*.ts', '*.tsx*', '*.mts', '*.yml', '*.yaml', '*.json', '*.lua', '*.toml', '*.tf'},
   callback = function()
     vim.bo.tabstop = 2
     vim.bo.softtabstop = 2
@@ -89,6 +93,11 @@ vim.keymap.set('n', '<C-j>', '<c-w>j')
 vim.keymap.set('n', '<C-k>', '<c-w>k')
 vim.keymap.set('n', '<C-l>', '<c-w>l')
 vim.keymap.set('n', '<C-h>', '<c-w>h')
+-- move through windows in terminal mode
+--vim.keymap.set('t', '<C-j>', "<C-\\><C-n><C-w>j")
+--vim.keymap.set('t', '<C-k>', "<C-\\><C-n><C-w>k")
+--vim.keymap.set('t', '<C-l>', "<C-\\><C-n><C-w>l")
+--vim.keymap.set('t', '<C-h>', "<C-\\><C-n><C-w>h")
 
 if vim.fn.has('termguicolors') then
     vim.o.termguicolors = true

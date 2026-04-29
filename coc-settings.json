@@ -17,5 +17,9 @@
   "coc.preferences.jumpCommand": "edit",
   "javascript.validate.enable": false,
   "sql.database": "postgresql",
-  "inlayHint.enable": false
+  "inlayHint.enable": false,
+  "[markdown]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "prettier.enable": true
 }

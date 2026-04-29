@@ -49,8 +49,13 @@ function init_ideavim {
 	maybe_create_link $SCRIPT_DIR/.ideavimrc $HOME/.ideavimrc
 }
 
+function init_ghostty {
+	maybe_create_link $SCRIPT_DIR/ghostty-config $HOME/.config/ghostty/config
+}
+
 init_git
 init_zsh
 init_nvim
 init_tmux
 init_ideavim
+init_ghostty

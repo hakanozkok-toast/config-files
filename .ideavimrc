@@ -220,4 +220,6 @@ nmap <leader>xs :action StepInto<CR>
 nmap <leader>xr :action StepOut<CR>
 nmap <leader>c<space> :action CommentByLineComment<CR>
 nmap <leader>gr :action ShowUsages<CR>
+nmap <Leader>gf <action>(com.mituuz.fuzzier.FuzzierVCS)
+nmap <Leader>fzf <action>(com.mituuz.fuzzier.FuzzierVCS)
 set commentary
