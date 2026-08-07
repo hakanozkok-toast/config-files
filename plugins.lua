@@ -10,7 +10,7 @@ return {
       end
     end,
     config = function()
-      vim.g.vista_default_executive = 'coc'
+      vim.g.vista_default_executive = 'nvim_lsp'
       vim.g.vista_sidebar_width = 60
     end
   },
@@ -267,54 +267,42 @@ return {
   -- git graph log visualisation
   'rbong/vim-flog',
 
-  -- nice LSP client
+  -- completion engine (replaces coc.nvim completion)
   {
-    'neoclide/coc.nvim',
-    branch = 'release',
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+    },
     config = function()
-      vim.opt.signcolumn = "yes"
-      local keyset = vim.keymap.set
-      -- Use K to show documentation in preview window
-      function _G.show_docs()
-        local cw = vim.fn.expand('<cword>')
-        if vim.fn.index({'vim', 'help'}, vim.bo.filetype) >= 0 then
-          vim.api.nvim_command('h ' .. cw)
-        elseif vim.api.nvim_eval('coc#rpc#ready()') then
-          vim.fn.CocActionAsync('doHover')
-        else
-          vim.api.nvim_command('!' .. vim.o.keywordprg .. ' ' .. cw)
-        end
-      end
-      keyset("n", "K", '<CMD>lua _G.show_docs()<CR>', {silent = true})
-      -- Use <c-space> to trigger completion
-      keyset("i", "<c-space>", "coc#refresh()", {silent = true, expr = true})
-      vim.api.nvim_create_augroup("CocGroup", {})
-      vim.api.nvim_create_autocmd("CursorHold", {
-        group = "CocGroup",
-        command = "silent call CocActionAsync('highlight')",
-        desc = "Highlight symbol under cursor on CursorHold"
+      local cmp = require('cmp')
+      local luasnip = require('luasnip')
+      cmp.setup({
+        snippet = {
+          expand = function(args) luasnip.lsp_expand(args.body) end,
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+          ['<C-j>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then cmp.select_next_item()
+            else fallback() end
+          end, { 'i' }),
+          ['<C-k>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then cmp.select_prev_item()
+            else fallback() end
+          end, { 'i' }),
+        }),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          { name = 'luasnip' },
+        }, {
+          { name = 'buffer' },
+        }),
       })
-      keyset("n", "<leader>d", "<Plug>(coc-definition)", {silent = true})
-      keyset("n", "<leader>gy", "<Plug>(coc-type-definition)", {silent = true})
-      keyset("n", "<leader>gi", "<Plug>(coc-implementation)", {silent = true})
-      keyset("n", "<leader>gr", "<Plug>(coc-references)", {silent = true})
-      keyset("n", "<leader>rn", "<Plug>(coc-rename)", {silent = true})
-      -- -- scroll popup
-      keyset("n", "<C-j>", 'coc#float#has_scroll() ? coc#float#scroll(1, 5) : "<c-w>j"',
-             {silent = true, nowait = true, expr = true})
-      keyset("n", "<C-k>", 'coc#float#has_scroll() ? coc#float#scroll(0, 5) : "<c-w>k"',
-             {silent = true, nowait = true, expr = true})
-      keyset("i", "<C-j>", 'coc#float#has_scroll() ? "\\<c-j>=coc#float#scroll(1, 5)\\<cr>" : "\\<Right>"',
-             {silent = true, nowait = true, expr = true, remap=false})
-      keyset("i", "<C-k>", 'coc#float#has_scroll() ? "\\<c-j>=coc#float#scroll(1, 5)\\<cr>" : "\\<Left>"',
-             {silent = true, nowait = true, expr = true, remap=false})
-      keyset("v", "<C-j>", 'coc#float#has_scroll() ? coc#float#scroll(1, 5) : "<c-w>j"',
-             {silent = true, nowait = true, expr = true})
-      keyset("v", "<C-k>", 'coc#float#has_scroll() ? coc#float#scroll(0, 5) : "<c-w>k"',
-             {silent = true, nowait = true, expr = true})
-      ---- suggestion select
-      keyset("i", '<cr>', 'coc#pum#visible() ? coc#pum#confirm() : "\\<CR>"', {expr=true, noremap=true})
-    end
+    end,
   },
 
   -- git integration
@@ -400,11 +388,97 @@ return {
   },
   {
     "mason-org/mason-lspconfig.nvim",
-    opts = {},
     dependencies = {
-        { "mason-org/mason.nvim", opts = {} },
-        "neovim/nvim-lspconfig",
+      { "mason-org/mason.nvim", opts = {} },
+      "neovim/nvim-lspconfig",
+      "hrsh7th/cmp-nvim-lsp",
     },
+    config = function()
+      local lspconfig = require('lspconfig')
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local bufnr = args.buf
+          local opts = { silent = true, buffer = bufnr }
+          vim.keymap.set('n', '<leader>d', vim.lsp.buf.definition, opts)
+          vim.keymap.set('n', '<leader>gy', vim.lsp.buf.type_definition, opts)
+          vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, opts)
+          vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, opts)
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+          vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, opts)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.supports_method('textDocument/documentHighlight') then
+            vim.api.nvim_create_autocmd('CursorHold', {
+              buffer = bufnr,
+              callback = function() vim.lsp.buf.document_highlight() end,
+            })
+            vim.api.nvim_create_autocmd('CursorMoved', {
+              buffer = bufnr,
+              callback = function() vim.lsp.buf.clear_references() end,
+            })
+          end
+        end,
+      })
+
+      -- Resolve the nearest `.venv` walking up from the buffer, so pyright picks
+      -- up project dependencies without a per-project pyrightconfig.json.
+      -- Falls back to the ambient interpreter when no venv is found.
+      local function venv_python(start)
+        local root = vim.fs.root(start, { '.venv' })
+        if not root then return nil end
+        local python = root .. '/.venv/bin/python'
+        return (vim.uv.fs_stat(python) and python) or nil
+      end
+
+      -- mason-lspconfig v2 dropped `handlers` and enables servers through
+      -- `vim.lsp.enable()`, so per-server options go through `vim.lsp.config()`.
+      vim.lsp.config('*', { capabilities = capabilities })
+
+      vim.lsp.config('pyright', {
+        -- `client.settings` is what gets pushed to the server, and it is
+        -- snapshotted before `before_init` runs -- so set it in `on_init`.
+        on_init = function(client)
+          local python = venv_python(client.config.root_dir)
+          if python then
+            client.settings = vim.tbl_deep_extend('force', client.settings or {}, {
+              python = { pythonPath = python },
+            })
+          end
+        end,
+      })
+
+      require('mason-lspconfig').setup({
+        ensure_installed = { 'lua_ls', 'pyright' },
+        automatic_enable = {
+          exclude = { 'kotlin_lsp', 'kotlin_language_server' },
+        },
+      })
+
+      vim.api.nvim_create_user_command('StartKotlinLSP', function()
+        local root_dir = vim.fs.root(0, { 'settings.gradle', 'settings.gradle.kts', 'pom.xml', 'build.gradle', 'build.gradle.kts', 'workspace.json' })
+        if not root_dir then
+          vim.notify('kotlin-lsp: no project root found', vim.log.levels.WARN)
+          return
+        end
+        root_dir = vim.fn.fnamemodify(root_dir, ':p')
+        for _, client in ipairs(vim.lsp.get_clients({ name = 'kotlin_lsp' })) do
+          if vim.fn.fnamemodify(client.config.root_dir, ':p') == root_dir then
+            vim.lsp.buf_attach_client(0, client.id)
+            return
+          end
+        end
+        vim.lsp.start({
+          name = 'kotlin_lsp',
+          cmd = { 'kotlin-lsp', '--stdio' },
+          root_dir = root_dir,
+          capabilities = capabilities,
+        })
+      end, {})
+
+      vim.opt.signcolumn = 'yes'
+    end,
   },
   --{
   --  "sindrets/diffview.nvim"
@@ -437,6 +511,20 @@ return {
     opts = {},
   },
   {
+    "stevearc/conform.nvim",
+    config = function()
+      require('conform').setup({
+        formatters_by_ft = {
+          markdown = { 'prettier' },
+        },
+        format_on_save = {
+          timeout_ms = 3000,
+          lsp_fallback = false,
+        },
+      })
+    end,
+  },
+  {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
     config = true,
@@ -458,6 +546,26 @@ return {
       -- Diff management
       { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+    },
+    opts = {
+      terminal = {
+        --@module "snacks"
+        --@type snacks.win.Config{}
+        snacks_win_opts = {
+          position = "float",
+          width = 80,
+          keys = {
+            claude_hide = {
+              "<M-,>",
+              function(self)
+                self:hide()
+              end,
+              mode = "t",
+              desc = "Hide",
+            }
+          }
+        }
+      }
     },
   },
 }
